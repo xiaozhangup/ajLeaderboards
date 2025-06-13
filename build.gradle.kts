@@ -1,7 +1,7 @@
 plugins {
     java
     `maven-publish`
-    id("com.github.johnrengelman.shadow").version("6.1.0")
+    id("com.github.johnrengelman.shadow").version("7.1.2")
     id("io.github.slimjar").version("1.3.0")
 }
 
@@ -29,8 +29,10 @@ dependencies {
     testImplementation("junit:junit:4.12")
 
     implementation("io.github.slimjar:slimjar:1.2.7")
-    compileOnly("com.github.MilkBowl:VaultAPI:1.7")
-    compileOnly("org.spigotmc:spigot-api:1.18.2-R0.1-SNAPSHOT")
+    compileOnly("com.github.MilkBowl:VaultAPI:1.7") {
+        exclude(group = "org.bukkit", module = "bukkit")
+    }
+    compileOnly("me.xiaozhangup.octopus:octopus-api:1.21.4-R0.1-SNAPSHOT")
     compileOnly("me.clip:placeholderapi:2.11.6")
     compileOnly("org.xerial:sqlite-jdbc:3.32.3.2")
     compileOnly("org.spongepowered:configurate-yaml:4.0.0")
@@ -44,6 +46,7 @@ dependencies {
     implementation("us.ajg0702.commands.api:api:1.0.0")
 
     compileOnly("net.luckperms:api:5.4")
+    compileOnly("com.squareup.okhttp3:okhttp:4.11.0")
 
     implementation("io.papermc:paperlib:1.0.7")
 
@@ -53,7 +56,6 @@ dependencies {
 
     slim("com.zaxxer:HikariCP:3.4.5")
     slim("com.h2database:h2:2.1.214")
-    slim("com.squareup.okhttp3:okhttp:4.11.0")
     //implementation("io.prometheus", "simpleclient", "0.9.0")
 }
 
@@ -77,8 +79,6 @@ tasks.slimJar {
     relocate("org.h2", "us.ajg0702.leaderboards.libs.h2")
     relocate("com.zaxxer.hikari", "us.ajg0702.leaderboards.libs.hikari")
     relocate("com.squareup", "us.ajg0702.leaderboards.libs")
-    relocate("okhttp3", "us.ajg0702.leaderboards.libs.okhttp3")
-    relocate("okio", "us.ajg0702.leaderboards.libs.okio")
 }
 
 tasks.shadowJar {
@@ -92,11 +92,8 @@ tasks.shadowJar {
     relocate("io.leangen", "us.ajg0702.leaderboards.libs")
     relocate("io.papermc.lib", "us.ajg0702.leaderboards.libs.paperlib")
     relocate("com.squareup", "us.ajg0702.leaderboards.libs")
-    relocate("okhttp3", "us.ajg0702.leaderboards.libs.okhttp3")
-    relocate("okio", "us.ajg0702.leaderboards.libs.okio")
     relocate("org.intellij", "us.ajg0702.leaderboards.libs.intellij")
     relocate("org.jetbrains", "us.ajg0702.leaderboards.libs.jetbrains")
-    relocate("kotlin", "us.ajg0702.leaderboards.kotlin")
 
     archiveBaseName.set("ajLeaderboards")
     archiveClassifier.set("")
@@ -144,6 +141,6 @@ publishing {
 
 
 java {
-    sourceCompatibility = JavaVersion.VERSION_1_8
-    targetCompatibility = JavaVersion.VERSION_1_8
+    sourceCompatibility = JavaVersion.VERSION_21
+    targetCompatibility = JavaVersion.VERSION_21
 }

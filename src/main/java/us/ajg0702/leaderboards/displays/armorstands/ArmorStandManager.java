@@ -1,6 +1,5 @@
 package us.ajg0702.leaderboards.displays.armorstands;
 
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Particle;
 import org.bukkit.World;
@@ -88,21 +87,14 @@ public class ArmorStandManager {
             Sign ss = sign.getSign();
             if(ss == null) return;
             BlockFace face;
-            if(VersionSupport.getMinorVersion() > 12) {
-                BlockData bd = ss.getBlockData();
-                if(bd instanceof org.bukkit.block.data.type.Sign) {
-                    org.bukkit.block.data.type.Sign bs = (org.bukkit.block.data.type.Sign) bd;
-                    face = bs.getRotation();
-                } else if(bd instanceof WallSign) {
-                    WallSign bs = (WallSign) bd;
-                    face = bs.getFacing();
-                } else {
-                    Debug.info("Skipping getting face for sign because it is an unknown type! " + bd.getClass());
-                    return;
-                }
-            } else {
-                @SuppressWarnings("deprecation") org.bukkit.material.Sign bs = (org.bukkit.material.Sign) ss.getData();
+            BlockData bd = ss.getBlockData();
+            if(bd instanceof org.bukkit.block.data.type.Sign bs) {
+                face = bs.getRotation();
+            } else if(bd instanceof WallSign bs) {
                 face = bs.getFacing();
+            } else {
+                Debug.info("Skipping getting face for sign because it is an unknown type! " + bd.getClass());
+                return;
             }
 
             Location sl = sign.getLocation();

@@ -1,6 +1,6 @@
 package us.ajg0702.leaderboards.displays.heads;
 
-import org.apache.commons.lang.Validate;
+import org.apache.commons.lang3.Validate;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
@@ -33,21 +33,14 @@ public class HeadManager {
         Sign ss = sign.getSign();
         if(ss == null) return;
         BlockFace face;
-        if(VersionSupport.getMinorVersion() > 12) {
-            BlockData bd = ss.getBlockData();
-            if(bd instanceof org.bukkit.block.data.type.Sign) {
-                org.bukkit.block.data.type.Sign bs = (org.bukkit.block.data.type.Sign) bd;
-                face = bs.getRotation();
-            } else if(bd instanceof WallSign) {
-                WallSign bs = (WallSign) bd;
-                face = bs.getFacing();
-            } else {
-                Debug.info("Skipping searching for heads around sign because its an unknown type! " + bd.getClass());
-                return;
-            }
-        } else {
-            @SuppressWarnings("deprecation") org.bukkit.material.Sign bs = (org.bukkit.material.Sign) ss.getData();
+        BlockData bd = ss.getBlockData();
+        if(bd instanceof org.bukkit.block.data.type.Sign bs) {
+            face = bs.getRotation();
+        } else if(bd instanceof WallSign bs) {
             face = bs.getFacing();
+        } else {
+            Debug.info("Skipping searching for heads around sign because its an unknown type! " + bd.getClass());
+            return;
         }
 
         Location sl = sign.getLocation();
@@ -147,9 +140,8 @@ public class HeadManager {
         } else {
             plugin.getScheduler().runSync(loc, () -> {
                 BlockState bs = loc.getBlock().getState();
-                if(!(bs instanceof Skull)) return;
+                if(!(bs instanceof Skull skull)) return;
 
-                Skull skull = (Skull) bs;
                 if(VersionSupport.getMinorVersion() > 9) {
                     assert op != null;
                     skull.setOwningPlayer(op);
